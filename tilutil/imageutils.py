@@ -422,6 +422,8 @@ def get_photo_caption(photo, container, caption_template):
 
 _YEAR_PATTERN_INDEX = re.compile(r'([0-9][0-9][0-9][0-9]) (.*)')
 
+_CLEAR_TEXT_PATTERN = re.compile(r"[^0-9a-zA-Z]+")
+
 def format_album_name(album, name, folder_template):
     """Formats a folder name using a template.
 
@@ -434,6 +436,7 @@ def format_album_name(album, name, folder_template):
         name = ''
     ascii_name = name.encode('ascii', 'replace')
     plain_name = ascii_name.replace(' ', '')
+    clear_name = _CLEAR_TEXT_PATTERN.sub("_", name)
    
     nodate_name = name
     match = re.match(_YEAR_PATTERN_INDEX, name)
@@ -463,10 +466,11 @@ def format_album_name(album, name, folder_template):
             hint=folderhint,
             yyyy=year,
             mm=month,
-            dd=day)
+            dd=day,
+            clear_name=clear_name)
     except KeyError, ex:
         su.pout(u'Unrecognized field in folder template: %s. Use one of: name, ascii_name, '
-                'plain_name, hint, yyyy, mm, dd.' % (str(ex)))
+                'plain_name, clear_name, hint, yyyy, mm, dd.' % (str(ex)))
         return folder_template
 
     
