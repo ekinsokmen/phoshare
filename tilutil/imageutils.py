@@ -115,11 +115,11 @@ def is_ignore(file_name):
     name = file_name.lower()
     return name in _IGNORE_LIST
 
-def make_foldername(name):
+def make_foldername(name, enableslash=False):
     """Returns a valid folder name by replacing problematic characters."""
     result = u''
     for c in name.strip():
-        if c.isdigit() or c.isalpha() or c in (',', ' ', '.', '-'):
+        if c.isdigit() or c.isalpha() or c in (',', ' ', '.', '-') or (enableslash and c == '/'):
             result += c
         elif c == ':':
             result += "."

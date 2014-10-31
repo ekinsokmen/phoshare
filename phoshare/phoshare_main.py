@@ -673,7 +673,7 @@ class ExportLibrary(object):
                 prefix = prefix + imageutils.make_foldername(folder_hint) + "/"
             formatted_name = imageutils.format_album_name(
                 sub_album, sub_name, options.foldertemplate)
-            sub_name = prefix + imageutils.make_foldername(formatted_name)
+            sub_name = prefix + imageutils.make_foldername(formatted_name, options.enablesubfolders)
             sub_name = self._find_unused_folder(sub_name)
 
             # first, do the sub-albums
@@ -909,6 +909,8 @@ def get_option_parser():
                  help='Print build version and exit.')
     p.add_option('--omitdatabasefile', action='store_true',
                 help='Omits reading the database file.')
+    p.add_option('--enablesubfolders', action='store_true',
+                help='Enables usage of / (slash) in folder template to support sub folders.')   
     return p
 
 def run_phoshare(cmd_args):
