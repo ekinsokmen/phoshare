@@ -146,16 +146,18 @@ class AppleXMLHandler(sax.handler.ContentHandler):
         '''Returns the root of the parsed data tree'''
         return self.top_node[0]
 
-def read_applexml(filename, sql_filename):
+def read_applexml(filename, sql_filename, verbose=False):
     '''Reads the named file, and parses it as an Apple XML file. Returns the
     top node. Replaces bad characters in the input file. Sometimes AlbumData.xml
     contains 0x00 characters!'''
+    if verbose:
+        print "Loading library %s ..." % (filename)
     f = open(filename, buffering=16384)
     data = f.read().replace('\000', '')
     f.close()
-    return read_applexml_string(data, sql_filename)
+    return read_applexml_string(data, sql_filename, verbose)
 
-def read_applexml_string(data, sql_filename):
+def read_applexml_string(data, sql_filename, verbose=False):
     '''Parses the data as Apple XML format. Returns the top node.'''
     #parser = sax.make_parser()
     handler = AppleXMLHandler()
@@ -165,11 +167,15 @@ def read_applexml_string(data, sql_filename):
     album_xml = handler.gettopnode()
     
     if sql_filename:
+        if verbose:
+            print "Loading database %s ..." % (sql_filename) 
         # keywords are no longer available in XML
         # quick hack to pull them out of the sqlite database instead
         conn = sqlite3.connect(sql_filename)
         c = conn.cursor()
         photos = album_xml['Master Image List']
+        if verbose:
+            print "Loading keywords of %d photos ..." % (len(photos))
         for key in photos:
             photo = photos[key]
         
