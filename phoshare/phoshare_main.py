@@ -907,6 +907,8 @@ def get_option_parser():
                  help='Print verbose messages.')
     p.add_option('--version', action='store_true', 
                  help='Print build version and exit.')
+    p.add_option('--omitdatabasefile', action='store_true',
+                help='Omits reading the database file.')
     return p
 
 def run_phoshare(cmd_args):
@@ -964,8 +966,12 @@ def run_phoshare(cmd_args):
 
     album_xml_file = iphotodata.get_album_xmlfile(
         su.expand_home_folder(options.iphoto))
-    album_sql_file = iphotodata.get_album_sqlfile(
-        su.expand_home_folder(options.iphoto))
+    if options.omitdatabasefile:
+        album_sql_file=""
+    else:
+        album_sql_file = iphotodata.get_album_sqlfile(
+            su.expand_home_folder(options.iphoto))
+            
     data = iphotodata.get_iphoto_data(album_xml_file, album_sql_file, ratings=options.ratings,
                                        verbose=options.verbose, aperture=options.aperture)
     if options.originals and options.export:
