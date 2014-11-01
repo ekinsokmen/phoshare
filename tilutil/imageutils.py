@@ -502,6 +502,7 @@ def format_photo_name(photo, album_name, index, padded_index,
 
     ascii_title = orig_basename.encode('ascii', 'replace')
     plain_title = ascii_title.replace(' ', '')
+    clear_title = _CLEAR_TEXT_PATTERN.sub("_", orig_basename)
     ascii_album_name = album_name.encode('ascii', 'replace')
     plain_album_name = ascii_album_name.replace(' ', '')
     ascii_event = photo.event_name.encode('ascii', 'replace')
@@ -526,10 +527,11 @@ def format_photo_name(photo, album_name, index, padded_index,
                                               plain_title=plain_title,
                                               yyyy=year,
                                               mm=month,
-                                              dd=day)
+                                              dd=day,
+                                              clear_title=clear_title)
     except KeyError, ex:
         su.pout(u'Unrecognized field in name template: %s. Use one of: index, index0, event_index, '
-                'event_index0, album, ascii_album, event, ascii_event, title, ascii_title, '
+                'event_index0, album, ascii_album, event, ascii_event, title, ascii_title, clear_title, '
                 'yyyy, mm, or dd.' % (str(ex)))
         formatted_name = name_template
         
