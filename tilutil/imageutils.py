@@ -467,9 +467,10 @@ def format_album_name(album, name, folder_template):
             yyyy=year,
             mm=month,
             dd=day,
-            clear_name=clear_name)
+            clear_name=clear_name,
+            id=album.albumid)
     except KeyError, ex:
-        su.pout(u'Unrecognized field in folder template: %s. Use one of: name, ascii_name, '
+        su.pout(u'Unrecognized field in folder template: %s. Use one of: id, name, ascii_name, '
                 'plain_name, clear_name, hint, yyyy, mm, dd.' % (str(ex)))
         return folder_template
 
